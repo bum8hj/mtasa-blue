@@ -23,10 +23,13 @@ void CLuaObjectDefs::LoadFunctions()
         // Object get funcs
         {"getObjectRotation", GetObjectRotation},
         {"getObjectScale", GetObjectScale},
+        {"isObjectBreakable", ArgumentParser<IsObjectBreakable>},
+        {"isObjectMoving", ArgumentParser<IsObjectMoving>},
 
         // Object set funcs
         {"setObjectRotation", SetObjectRotation},
         {"setObjectScale", SetObjectScale},
+        {"setObjectBreakable", ArgumentParser<SetObjectBreakable>},
         {"moveObject", MoveObject},
         {"stopObject", StopObject},
     };
@@ -46,8 +49,13 @@ void CLuaObjectDefs::AddClass(lua_State* luaVM)
 
     lua_classfunction(luaVM, "getScale", "getObjectScale");
     lua_classfunction(luaVM, "setScale", "setObjectScale");
+    lua_classfunction(luaVM, "isBreakable", "isObjectBreakable");
+    lua_classfunction(luaVM, "setBreakable", "setObjectBreakable");
+    lua_classfunction(luaVM, "isMoving", "isObjectMoving");
 
     lua_classvariable(luaVM, "scale", "setObjectScale", "getObjectScale");
+    lua_classvariable(luaVM, "breakable", "setObjectBreakable", "isObjectBreakable");
+    lua_classvariable(luaVM, "moving", nullptr, "isObjectMoving");
 
     lua_registerclass(luaVM, "Object", "Element");
 }
@@ -148,6 +156,11 @@ int CLuaObjectDefs::GetObjectScale(lua_State* luaVM)
     return 1;
 }
 
+bool CLuaObjectDefs::IsObjectBreakable(CObject* const pObject)
+{
+    return pObject->IsBreakable();
+}
+
 int CLuaObjectDefs::SetObjectRotation(lua_State* luaVM)
 {
     CElement* pElement;
@@ -210,6 +223,11 @@ int CLuaObjectDefs::SetObjectScale(lua_State* luaVM)
 
     lua_pushboolean(luaVM, false);
     return 1;
+}
+
+bool CLuaObjectDefs::IsObjectMoving(CObject* const pObject)
+{
+    return pObject->IsMoving();
 }
 
 int CLuaObjectDefs::MoveObject(lua_State* luaVM)
@@ -281,4 +299,9 @@ int CLuaObjectDefs::StopObject(lua_State* luaVM)
 
     lua_pushboolean(luaVM, false);
     return 1;
+}
+
+bool CLuaObjectDefs::SetObjectBreakable(CObject* const pObject, const bool bBreakable)
+{
+    return CStaticFunctionDefinitions::SetObjectBreakable(pObject, bBreakable);
 }

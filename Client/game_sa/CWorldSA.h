@@ -42,14 +42,15 @@ class CWorldSA : public CWorld
 {
 public:
     CWorldSA();
-    void InstallHooks();
-    void Add(CEntity* entity, eDebugCaller CallerId);
-    void Add(CEntitySAInterface* entityInterface, eDebugCaller CallerId);
-    void Remove(CEntity* entity, eDebugCaller CallerId);
-    void Remove(CEntitySAInterface* entityInterface, eDebugCaller CallerId);
-    void RemoveReferencesToDeletedObject(CEntitySAInterface* entity);
-    bool ProcessLineOfSight(const CVector* vecStart, const CVector* vecEnd, CColPoint** colCollision, CEntity** CollisionEntity, const SLineOfSightFlags flags,
-                            SLineOfSightBuildingResult* pBuildingResult);
+    void  InstallHooks();
+    void  Add(CEntity* entity, eDebugCaller CallerId);
+    void  Add(CEntitySAInterface* entityInterface, eDebugCaller CallerId);
+    void  Remove(CEntity* entity, eDebugCaller CallerId);
+    void  Remove(CEntitySAInterface* entityInterface, eDebugCaller CallerId);
+    void  RemoveReferencesToDeletedObject(CEntitySAInterface* entity);
+    auto  ProcessLineAgainstMesh(CEntitySAInterface* e, CVector start, CVector end) -> SProcessLineOfSightMaterialInfoResult override;
+    bool  ProcessLineOfSight(const CVector* vecStart, const CVector* vecEnd, CColPoint** colCollision, CEntity** CollisionEntity, const SLineOfSightFlags flags,
+                             SLineOfSightBuildingResult* pBuildingResult, SProcessLineOfSightMaterialInfoResult* outMatInfo = nullptr);
     void  IgnoreEntity(CEntity* entity);
     float FindGroundZFor3DPosition(CVector* vecPosition);
     float FindRoofZFor3DCoord(CVector* pvecPosition, bool* pbOutResult);

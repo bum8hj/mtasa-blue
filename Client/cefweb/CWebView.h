@@ -32,8 +32,8 @@
 
 enum class ECefThreadState
 {
-    Running = 0, // CEF thread is currently running
-    Wait // CEF thread is waiting for the main thread
+    Running = 0,            // CEF thread is currently running
+    Wait                    // CEF thread is waiting for the main thread
 };
 
 class CWebView : public CWebViewInterface,
@@ -80,7 +80,7 @@ public:
     bool GetProperty(const SString& strKey, SString& outProperty);
 
     void InjectMouseMove(int iPosX, int iPosY);
-    void InjectMouseDown(eWebBrowserMouseButton mouseButton);
+    void InjectMouseDown(eWebBrowserMouseButton mouseButton, int count);
     void InjectMouseUp(eWebBrowserMouseButton mouseButton);
     void InjectMouseWheel(int iScrollVert, int iScrollHorz);
     void InjectKeyboardEvent(const CefKeyEvent& keyEvent);

@@ -12,7 +12,7 @@
 #pragma once
 
 #ifdef MTA_CLIENT
-    extern CLocalizationInterface* g_pLocalization;
+extern CLocalizationInterface* g_pLocalization;
 #else
     #include <CVector.h>
     #include <CVector2D.h>
@@ -245,6 +245,22 @@ inline float GetSmallestWrapUnsigned(float fValue, float fHigh)
 }
 
 void RotateVector(CVector& vecLine, const CVector& vecRotation);
+
+inline void ConvertZXYEulersToQuaternion(const CVector& vecFrom, CVector4D &vecTo)
+{
+    const float c1 = cos(vecFrom.fX * 0.5f);
+    const float c2 = cos(vecFrom.fY * 0.5f);
+    const float c3 = cos(vecFrom.fZ * 0.5f);
+
+    const float s1 = sin(vecFrom.fX * 0.5f);
+    const float s2 = sin(vecFrom.fY * 0.5f);
+    const float s3 = sin(vecFrom.fZ * 0.5f);
+
+    vecTo.fX = s1 * c2 * c3 - c1 * s2 * s3;
+    vecTo.fY = c1 * s2 * c3 + s1 * c2 * s3;
+    vecTo.fZ = c1 * c2 * s3 + s1 * s2 * c3;
+    vecTo.fW = c1 * c2 * c3 - s1 * s2 * s3;
+}
 
 #ifdef MTA_CLIENT
 // Misc utility functions

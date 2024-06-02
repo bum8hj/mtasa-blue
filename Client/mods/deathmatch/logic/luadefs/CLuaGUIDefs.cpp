@@ -524,6 +524,7 @@ void CLuaGUIDefs::AddGuiGridlistClass(lua_State* luaVM)
     lua_classfunction(luaVM, "getSelectedCount", "guiGridListGetSelectedCount");
     lua_classfunction(luaVM, "getSelectedItems", "guiGridListGetSelectedItems");
     lua_classfunction(luaVM, "getColumnCount", "guiGridListGetColumnCount");
+    lua_classfunction(luaVM, "getColumnWidth", "guiGridListGetColumnWidth");
 
     lua_classfunction(luaVM, "setItemData", "guiGridListSetItemData");
     lua_classfunction(luaVM, "setItemText", "guiGridListSetItemText");
@@ -4077,7 +4078,8 @@ bool CLuaGUIDefs::GUISetChatboxCharacterLimit(int charLimit)
     int maxCharLimit = g_pCore->GetChatboxMaxCharacterLimit();
 
     if (charLimit < 0 || charLimit > maxCharLimit)
-        throw std::invalid_argument(SString("Character limit must be %s than, or equal to %i (got: %i)", (charLimit < 0) ? "greater" : "less", (charLimit < 0) ? 0 : maxCharLimit, charLimit));
+        throw std::invalid_argument(SString("Character limit must be %s than, or equal to %i (got: %i)", (charLimit < 0) ? "greater" : "less",
+                                            (charLimit < 0) ? 0 : maxCharLimit, charLimit));
 
     return g_pCore->SetChatboxCharacterLimit(charLimit);
 }

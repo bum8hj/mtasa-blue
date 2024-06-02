@@ -199,15 +199,17 @@ public:
     unsigned int bJustGotOffTrain : 1;
     unsigned int bDeathPickupsPersist : 1;
     unsigned int bTestForShotInVehicle : 1;
-    //#ifdef GTA_REPLAY
+    // #ifdef GTA_REPLAY
     unsigned int bUsedForReplay : 1;            // This ped is controlled by replay and should be removed when replay is done.
-    //#endif
+    // #endif
 };
 
 class CPedWeaponAudioEntitySAInterface
 {
 public:
 };
+
+class CVehicleSAInterface;
 
 class CPedSAInterface : public CPhysicalSAInterface            // +1420  = current vehicle   312 first byte
 {
@@ -239,11 +241,17 @@ public:
     float               fCurrentRotation;
     float               fTargetRotation;
     float               fRotationSpeed;
-    BYTE                bPad8[4];
-    CEntitySAInterface* pContactEntity;
-    BYTE                bPad3[32];
-    CEntitySAInterface* CurrentObjective;            // current vehicle    1420
-    BYTE                bPad2[8];                    // 1424
+    float               fMoveAnim;
+    CPedSAInterface*    unkPed;
+    CVector             unk_56C;
+    CVector             unk_578;
+
+    CEntitySAInterface*  pContactEntity;
+    CVehicleSAInterface* pLastVehicle;
+    CVehicleSAInterface* pVehicle;
+
+    int                 unk_590;
+    int                 unk_594;
     BYTE                bPedType;                    // ped type? 0 = player, >1 = ped?  // 1432
     BYTE                bPad9[7];
     CWeaponSAInterface  Weapons[WEAPONSLOT_MAX];
@@ -254,7 +262,7 @@ public:
     BYTE                bFightingStyle;            // 1837
     BYTE                bFightingStyleExtra;
     BYTE                bPad7[1];
-    CFireSAInterface*     pFireOnPed;
+    CFireSAInterface*   pFireOnPed;
     BYTE                bPad10[104];
     CEntitySAInterface* pTargetedEntity;            // 1948
 };
@@ -264,21 +272,23 @@ class CPedSA : public virtual CPed, public virtual CPhysicalSA
     friend class CPoolsSA;
 
 private:
-    CWeaponSA*          m_pWeapons[WEAPONSLOT_MAX];
-    CPedIKSA*           m_pPedIK;
-    CPedIntelligenceSA* m_pPedIntelligence;
-    CPedSAInterface*    m_pPedInterface;
-    CPedSoundSA*        m_pPedSound;
+    CWeaponSA*          m_pWeapons[WEAPONSLOT_MAX]{};
+    CPedIKSA*           m_pPedIK{};
+    CPedIntelligenceSA* m_pPedIntelligence{};
+    CPedSAInterface*    m_pPedInterface{};
+    CPedSoundSA*        m_pPedSound{};
+
+    short m_sDefaultVoiceType;
+    short m_sDefaultVoiceID;
 
     DWORD         m_dwType;
     unsigned char m_ucOccupiedSeat;
 
 protected:
-    int m_iCustomMoveAnim;
+    int m_iCustomMoveAnim{ 0 };
 
 public:
-    CPedSA();
-    CPedSA(CPedSAInterface* pedInterface);
+    CPedSA(CPedSAInterface* pedInterface = nullptr) noexcept;
     ~CPedSA();
 
     void             SetInterface(CEntitySAInterface* intInterface);
@@ -383,6 +393,7 @@ public:
     void GetVoice(const char** pszVoiceType, const char** pszVoice);
     void SetVoice(short sVoiceType, short sVoiceID);
     void SetVoice(const char* szVoiceType, const char* szVoice);
+    void ResetVoice();
     void SetLanding(bool bIsLanding) { GetPedInterface()->pedFlags.bIsLanding = bIsLanding; }
     void SetUpdateMetricsRequired(bool required) { GetPedInterface()->pedFlags.bUpdateMatricesRequired = required; }
 

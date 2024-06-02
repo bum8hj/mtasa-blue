@@ -28,6 +28,12 @@ void CFileLoaderSA::StaticSetHooks()
     HookInstall(0x538690, (DWORD)CFileLoader_LoadObjectInstance, 5);
 }
 
+CEntitySAInterface* CFileLoaderSA::LoadObjectInstance(SFileObjectInstance* obj)
+{
+    // Second argument is model name. It's unused in the function
+    return ((CEntitySAInterface * (__cdecl*)(SFileObjectInstance*, const char*))0x538090)(obj, nullptr);
+}
+
 class CAtomicModelInfo
 {
 public:
@@ -56,7 +62,7 @@ void GetNameAndDamage(const char* nodeName, char (&outName)[OutBuffSize], bool& 
 
     const auto NodeNameEndsWith = [=](const char* with) {
         const auto withLen = strlen(with);
-        //dassert(withLen <= nodeNameLen);
+        // dassert(withLen <= nodeNameLen);
         return withLen <= nodeNameLen /*dont bother checking otherwise, because it might cause a crash*/
                && strncmp(nodeName + nodeNameLen - withLen, with, withLen) == 0;
     };

@@ -30,6 +30,27 @@ public:
     float   fRadius;
 };
 
+enum class eModelIdeFlag
+{
+    IS_ROAD,
+    DRAW_LAST,
+    ADDITIVE,
+    IGNORE_LIGHTING,            // Used with animated objects
+    NO_ZBUFFER_WRITE,
+    DONT_RECEIVE_SHADOWS,
+    IS_GLASS_TYPE_1,
+    IS_GLASS_TYPE_2,
+    IS_GARAGE_DOOR,
+    IS_DAMAGABLE,
+    IS_TREE,
+    IS_PALM,
+    DOES_NOT_COLLIDE_WITH_FLYER,
+    IS_TAG,
+    DISABLE_BACKFACE_CULLING,
+    IS_BREAKABLE_STATUE,
+    IS_CRANE,
+};
+
 enum class eModelInfoType : unsigned char
 {
     ATOMIC = 1,
@@ -135,11 +156,18 @@ public:
     virtual BYTE           GetVehicleType() = 0;
     virtual void           Request(EModelRequestType requestType, const char* szTag /* = NULL*/) = 0;
     virtual bool           IsLoaded() = 0;
-    virtual BYTE           GetFlags() = 0;
+    virtual unsigned short GetFlags() = 0;
+    virtual unsigned short GetOriginalFlags() = 0;
+    virtual void           SetFlags(unsigned short usFlags) = 0;
+    virtual void           SetIdeFlags(unsigned int uiFlags) = 0;
+    virtual bool           GetIdeFlag(eModelIdeFlag eFlag) = 0;
+    virtual void           SetIdeFlag(eModelIdeFlag eFlag, bool bState) = 0;
     virtual CBoundingBox*  GetBoundingBox() = 0;
     virtual bool           IsValid() = 0;
     virtual bool           IsAllocatedInArchive() = 0;
     virtual unsigned short GetTextureDictionaryID() = 0;
+    virtual void           SetTextureDictionaryID(unsigned short usTxdId) = 0;
+    virtual void           ResetTextureDictionaryID() = 0;
     virtual float          GetLODDistance() = 0;
     virtual float          GetOriginalLODDistance() = 0;
     virtual void           SetLODDistance(float fDistance, bool bOverrideMaxDistance = false) = 0;
@@ -205,6 +233,7 @@ public:
     virtual void      MakeObjectModel(unsigned short usBaseID) = 0;
     virtual void      MakeVehicleAutomobile(unsigned short usBaseID) = 0;
     virtual void      MakeTimedObjectModel(unsigned short usBaseID) = 0;
+    virtual void      MakeClumpModel(unsigned short usBaseID) = 0;
 
     virtual SVehicleSupportedUpgrades GetVehicleSupportedUpgrades() = 0;
     virtual void                      ResetSupportedUpgrades() = 0;
@@ -217,4 +246,5 @@ public:
     virtual bool IsTowableBy(CModelInfo* towingModel) = 0;
 
     virtual unsigned int GetParentID() = 0;
+    virtual bool         IsDynamic() = 0;
 };

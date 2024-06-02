@@ -224,6 +224,24 @@ public:
             return numLodChildrenRendered & 0x1f;
         return -1;
     }
+
+    void ResolveReferences()
+    {
+        using CEntity_ResolveReferences = void*(__thiscall*)(CEntitySAInterface*);
+        ((CEntity_ResolveReferences)0x571A40)(this);
+    };
+
+    void RemoveShadows()
+    {
+        using CStencilShadow_dtorByOwner = void*(__cdecl*)(CEntitySAInterface * pEntity);
+        ((CStencilShadow_dtorByOwner)0x711730)(this);
+    };
+
+    void DeleteRwObject()
+    {
+        using vtbl_DeleteRwObject = void(__thiscall*)(CEntitySAInterface * pEntity);
+        ((vtbl_DeleteRwObject)this->vtbl->DeleteRwObject)(this);
+    };
 };
 static_assert(sizeof(CEntitySAInterface) == 0x38, "Invalid size for CEntitySAInterface");
 
@@ -303,7 +321,7 @@ public:
     void SetStaticWaitingForCollision(bool bStatic) { m_pInterface->bIsStaticWaitingForCollision = bStatic; }
 
     RwMatrix* GetBoneRwMatrix(eBone boneId);
-    bool         SetBoneMatrix(eBone boneId, const CMatrix& matrix);
+    bool      SetBoneMatrix(eBone boneId, const CMatrix& matrix);
 
     bool GetBoneRotation(eBone boneId, float& yaw, float& pitch, float& roll);
     bool SetBoneRotation(eBone boneId, float yaw, float pitch, float roll);
@@ -314,11 +332,8 @@ public:
     virtual void OnChangingPosition(const CVector& vecNewPosition) {}
 
 private:
-    static unsigned long FUNC_CClumpModelInfo__GetFrameFromId;
-    static unsigned long FUNC_RwFrameGetLTM;
-
-    void*         m_pStoredPointer;
-    CVector       m_LastGoodPosition;
+    void*   m_pStoredPointer;
+    CVector m_LastGoodPosition;
 };
 
 //

@@ -5,7 +5,7 @@
  *                            | (__| |_| |  _ <| |___
  *                             \___|\___/|_| \_\_____|
  *
- * Copyright (C) 1998 - 2022, Daniel Stenberg, <daniel@haxx.se>, et al.
+ * Copyright (C) Daniel Stenberg, <daniel@haxx.se>, et al.
  *
  * This software is licensed as described in the file COPYING, which
  * you should have received as part of this distribution. The terms
@@ -68,7 +68,7 @@ int Curl_gethostname(char * const name, GETHOSTNAME_TYPE_ARG2 namelen)
   /* Override host name when environment variable CURL_GETHOSTNAME is set */
   const char *force_hostname = getenv("CURL_GETHOSTNAME");
   if(force_hostname) {
-    strncpy(name, force_hostname, namelen);
+    strncpy(name, force_hostname, namelen - 1);
     err = 0;
   }
   else {

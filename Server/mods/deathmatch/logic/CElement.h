@@ -22,7 +22,7 @@
 #include "CElementGroup.h"
 
 // Used to check fast version of getElementsByType
-//#define CHECK_ENTITIES_FROM_ROOT  MTA_DEBUG
+// #define CHECK_ENTITIES_FROM_ROOT  MTA_DEBUG
 
 #define IS_BLIP(element)     ((element)->GetType()==CElement::BLIP)
 #define IS_COLSHAPE(element) ((element)->GetType()==CElement::COLSHAPE)
@@ -46,7 +46,7 @@ class CLuaMain;
 typedef CFastList<CElement*> CChildListType;
 typedef CFastList<CElement*> CElementListType;
 
-typedef std::vector<CElement*> CElementListSnapshot;
+typedef std::vector<CElement*>                CElementListSnapshot;
 typedef std::shared_ptr<CElementListSnapshot> CElementListSnapshotRef;
 
 class CElement
@@ -135,7 +135,7 @@ public:
     void DeleteAllEvents();
 
     void           ReadCustomData(CEvents* pEvents, CXMLNode& Node);
-    CCustomData*   GetCustomDataPointer() { return m_pCustomData; }
+    CCustomData&   GetCustomDataManager() { return m_CustomData; }
     CLuaArgument*  GetCustomData(const char* szName, bool bInheritData, ESyncType* pSyncType = NULL);
     CLuaArguments* GetAllCustomData(CLuaArguments* table);
     bool           GetCustomDataString(const char* szName, char* pOut, size_t sizeBuffer, bool bInheritData);
@@ -248,7 +248,7 @@ protected:
     void CallParentEvent(const char* szName, const CLuaArguments& Arguments, CElement* pSource, CPlayer* pCaller = NULL);
 
     CMapEventManager* m_pEventManager;
-    CCustomData*      m_pCustomData;
+    CCustomData       m_CustomData;
 
     EElementType m_iType;
     ElementID    m_ID;

@@ -308,7 +308,7 @@ public:
     float   m_fAttachedCamAngle;            // for giving the attached camera a tilt.
 
     // RenderWare camera pointer
-    DWORD* m_pRwCamera;            // was RwCamera *
+    RwCamera* m_pRwCamera;
     /// stuff for cut scenes
     CEntitySAInterface* pTargetEntity;
     CEntitySAInterface* pAttachedEntity;
@@ -397,13 +397,13 @@ public:
     CCameraSAInterface* GetInterface() { return internalInterface; };
     void                TakeControl(CEntity* entity, eCamMode CamMode, int CamSwitchStyle);
     void                TakeControl(CVector* position, int CamSwitchStyle);
-    void     Restore();
-    void     RestoreWithJumpCut();
-    CMatrix* GetMatrix(CMatrix* matrix);
-    void     SetMatrix(CMatrix* matrix);
-    void     Find3rdPersonCamTargetVector(float fDistance, CVector* vecGunMuzzle, CVector* vecSource, CVector* vecTarget);
-    float    Find3rdPersonQuickAimPitch();
-    BYTE     GetActiveCam();
+    void                Restore();
+    void                RestoreWithJumpCut();
+    CMatrix*            GetMatrix(CMatrix* matrix);
+    void                SetMatrix(CMatrix* matrix);
+    void                Find3rdPersonCamTargetVector(float fDistance, CVector* vecGunMuzzle, CVector* vecSource, CVector* vecTarget);
+    float               Find3rdPersonQuickAimPitch();
+    BYTE                GetActiveCam();
 
     CCam*         GetCam(BYTE bCameraID);
     virtual CCam* GetCam(CCamSAInterface* camInterface);
@@ -426,7 +426,4 @@ public:
     void      RestoreLastGoodState();
     void      SetShakeForce(float fShakeForce);
     float     GetShakeForce();
-
-private:
-    static unsigned long FUNC_RwFrameGetLTM;
 };

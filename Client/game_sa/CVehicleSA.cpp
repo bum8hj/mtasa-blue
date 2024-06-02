@@ -18,6 +18,7 @@
 #include "CGameSA.h"
 #include "CProjectileInfoSA.h"
 #include "CTrainSA.h"
+#include "CPlaneSA.h"
 #include "CVehicleSA.h"
 #include "CVisibilityPluginsSA.h"
 #include "CWorldSA.h"
@@ -37,15 +38,15 @@ _declspec(naked) void DoVehicleSunGlare(void* this_)
 void _declspec(naked) HOOK_Vehicle_PreRender(void)
 {
     _asm {
-        mov	ecx, m_bVehicleSunGlare
-		cmp	ecx, 0
-		jle	noglare
-		mov	ecx, esi
-		call DoVehicleSunGlare
-	noglare:
-		mov [esp+0D4h], edi
-		push 6ABD04h
-		retn
+        mov    ecx, m_bVehicleSunGlare
+        cmp    ecx, 0
+        jle    noglare
+        mov    ecx, esi
+        call DoVehicleSunGlare
+    noglare:
+        mov [esp+0D4h], edi
+        push 6ABD04h
+        retn
     }
 }
 
@@ -485,6 +486,18 @@ void CVehicleSA::SetTrainSpeed(float fSpeed)
 {
     auto pInterface = static_cast<CTrainSAInterface*>(GetVehicleInterface());
     pInterface->m_fTrainSpeed = fSpeed;
+}
+
+void CVehicleSA::SetPlaneRotorSpeed(float fSpeed)
+{
+    auto pInterface = static_cast<CPlaneSAInterface*>(GetInterface());
+    pInterface->m_fPropSpeed = fSpeed;
+}
+
+float CVehicleSA::GetPlaneRotorSpeed() 
+{
+    auto pInterface = static_cast<CPlaneSAInterface*>(GetInterface());
+    return pInterface->m_fPropSpeed;
 }
 
 bool CVehicleSA::GetTrainDirection()
